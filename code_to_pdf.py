@@ -30,10 +30,11 @@ def main(argv):
 
     parser = argparse.ArgumentParser(
         description='Convert source code into .pdf file')
-    parser.add_argument('input_dir', help='Root directory of the source code')
+    parser.add_argument('input_dir',
+                        help='Root directory of the source code')
     parser.add_argument('-o', '--output',
-                        nargs=1,
                         default='output.pdf',
+                        type=str,
                         help='Output .pdf file')
     parser.add_argument('-l', '--line_numbers',
                         action='store_true',
@@ -60,11 +61,13 @@ def main(argv):
             # Create the HTML version of each file using 'highlight' To handle
             # files with the same name living in different directories, name
             # the HTML files sequentially
-            subprocess.run(('highlight -i %s -o %s --include-style %s'
-                            % (src_file,
-                            os.path.join(tmp_dir, '%05d.html' % index),
-                            '--line-numbers' if args.line_numbers else ''))
-                        .split())
+            command = [
+                'highlight',
+                '-i', src_file,
+                '-o', os.path.join(tmp_dir, '%05d.html' % index),
+                '--include-style',
+                '%s' % ('--line-numbers' if args.line_numbers else '')]
+            subprocess.run(command)
 
         # All .html files are in the temporary directory, now convert to .pdf
         for html_file in (os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)):
