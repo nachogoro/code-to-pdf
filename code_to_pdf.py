@@ -25,9 +25,6 @@ EXTENSIONS=set((
 
 
 def main(argv):
-    # TODO: Make configurable
-    INCLUDE_LINES = True
-
     parser = argparse.ArgumentParser(
         description='Convert source code into .pdf file')
     parser.add_argument('input_dir',
